@@ -1,18 +1,16 @@
 #ifndef FALCON_APPLICATION_H_
 #define FALCON_APPLICATION_H_
 
-struct sapp_desc;
-struct sapp_event;
+#include "sokol_app.h"
 
 namespace falcon {
 
 // sokol_app wrapper
 class application {
-private:
-    // ctor
-    application() : _delta_time(0.0) {}
-
 public:
+    // ctor
+    application() : _last_time(0), _delta_time(0.0) {}
+
     // dtor
     virtual ~application() {}
 
@@ -67,7 +65,7 @@ protected:
 
 private:
     // last time
-    uint64_t _last_time = 0;
+    uint64_t _last_time;
 
     // delta time
     double _delta_time;
