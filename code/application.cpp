@@ -89,7 +89,7 @@ void application::configure_cb(sapp_desc *desc) {
     desc->width = 1024;
     desc->height = 768;
     desc->gl_force_gles2 = true;
-    desc->window_title = "dear";
+    desc->window_title = "falcon app";
     desc->ios_keyboard_resizes_canvas = false;
 
     // ユーザーコールバック

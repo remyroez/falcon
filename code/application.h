@@ -41,6 +41,12 @@ public:
     // fail callback
     void fail_cb(const char *message);
 
+    // get main window width
+    inline int width() const { return sapp_width(); }
+
+    // get main window height
+    inline int height() const { return sapp_height(); }
+
     // get delta time
     inline double delta_time() const { return _delta_time; }
 

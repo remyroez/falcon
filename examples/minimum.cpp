@@ -4,7 +4,12 @@
 namespace {
 
 class app : public falcon::application {
-    // no impl
+    void frame() override {
+        _renderer.begin_default_pass(width(), height());
+        _renderer.end_pass();
+    }
+
+    falcon::renderer _renderer;
 };
 
 } // namespace
