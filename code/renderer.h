@@ -29,6 +29,9 @@ public:
         sg_end_pass();
     }
 
+    // get color attachment action colors
+    const auto &color_attachment_action_colors(int index) const { return color_attachment_action(index).val; }
+
 public:
     // set clear color action
     void set_clear_color_action(int index, float r, float g, float b, float a = 1.f) {
@@ -38,6 +41,7 @@ public:
 protected:
     // get color attachment action
     sg_color_attachment_action &color_attachment_action(int index) { return _pass_action.colors[index]; }
+    const sg_color_attachment_action &color_attachment_action(int index) const { return _pass_action.colors[index]; }
 
     // set color attachment action
     void set_color_attachment_action(int index, sg_action action, float r, float g, float b, float a) {
@@ -50,7 +54,7 @@ protected:
     }
 
     // get depth attachment action
-    sg_depth_attachment_action &depth_attachment_action() { return _pass_action.depth; }
+    inline sg_depth_attachment_action &depth_attachment_action() { return _pass_action.depth; }
 
     // set depth attachment action
     void set_depth_attachment_action(sg_action action, float value) {
@@ -60,7 +64,7 @@ protected:
     }
 
     // get stencil attachment action
-    sg_stencil_attachment_action &stencil_attachment_action() { return _pass_action.stencil; }
+    inline sg_stencil_attachment_action &stencil_attachment_action() { return _pass_action.stencil; }
 
     // set stencil attachment action
     void set_stencil_attachment_action(sg_action action, uint8_t value) {
