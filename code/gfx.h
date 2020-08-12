@@ -20,6 +20,7 @@ using pass_action = sg_pass_action;
 using bindings = sg_bindings;
 
 // function wrappers
+inline buffer make_buffer(const sg_buffer_desc* desc) { return sg_make_buffer(desc); }
 inline buffer make_buffer(const sg_buffer_desc& desc) { return sg_make_buffer(desc); }
 inline buffer make_buffer(std::function<void(sg_buffer_desc&)> fn) {
     sg_buffer_desc desc{};
@@ -27,6 +28,7 @@ inline buffer make_buffer(std::function<void(sg_buffer_desc&)> fn) {
     return make_buffer(desc);
 }
 
+inline image make_image(const sg_image_desc* desc) { return sg_make_image(desc); }
 inline image make_image(const sg_image_desc& desc) { return sg_make_image(desc); }
 inline image make_image(std::function<void(sg_image_desc&)> fn) {
     sg_image_desc desc{};
@@ -34,6 +36,7 @@ inline image make_image(std::function<void(sg_image_desc&)> fn) {
     return make_image(desc);
 }
 
+inline shader make_shader(const sg_shader_desc* desc) { return sg_make_shader(desc); }
 inline shader make_shader(const sg_shader_desc& desc) { return sg_make_shader(desc); }
 inline shader make_shader(std::function<void(sg_shader_desc&)> fn) {
     sg_shader_desc desc{};
@@ -41,6 +44,7 @@ inline shader make_shader(std::function<void(sg_shader_desc&)> fn) {
     return make_shader(desc);
 }
 
+inline pipeline make_pipeline(const sg_pipeline_desc* desc) { return sg_make_pipeline(desc); }
 inline pipeline make_pipeline(const sg_pipeline_desc& desc) { return sg_make_pipeline(desc); }
 inline pipeline make_pipeline(std::function<void(sg_pipeline_desc&)> fn) {
     sg_pipeline_desc desc{};

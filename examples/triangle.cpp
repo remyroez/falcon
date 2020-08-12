@@ -1,6 +1,10 @@
 
 #include "falcon.h"
-//#include "triangle-sapp.glsl.h"
+
+#define USE_SHADER
+#ifdef USE_SHADER
+#include "triangle-sapp.glsl.h"
+#endif
 
 namespace {
 
@@ -29,7 +33,9 @@ public:
         });
 
         /* create shader from code-generated sg_shader_desc */
-        //sg_shader shd = falcon::gfx::make_shader(triangle_shader_desc());
+#ifdef USE_SHADER
+        sg_shader shd = falcon::gfx::make_shader(triangle_shader_desc());
+#else
         auto shd = falcon::gfx::make_shader([](auto &_) {
             _.vs.source =
                 "#version 330\n"
@@ -48,14 +54,17 @@ public:
                 "  frag_color = color;\n"
                 "}\n";
         });
+#endif
 
         /* create a pipeline object (default render states are fine for triangle) */
         pip = falcon::gfx::make_pipeline([&shd](auto &_) {
             _.shader = shd;
             /* if the vertex layout doesn't have gaps, don't need to provide strides and offsets */
             {
+#ifndef USE_SHADER
                 constexpr auto ATTR_vs_position = 0;
                 constexpr auto ATTR_vs_color0 = 1;
+#endif
                 _.layout.attrs[ATTR_vs_position].format = SG_VERTEXFORMAT_FLOAT3;
                 _.layout.attrs[ATTR_vs_color0].format = SG_VERTEXFORMAT_FLOAT4;
             }
