@@ -5,8 +5,10 @@ cmake_policy(SET CMP0076 NEW)
 # project: falcon examples
 project(falcon_examples C CXX)
 
-# include: falcon
+# includes
 include(cmake/falcon.cmake)
+include(cmake/sokol-samples.cmake)
+include(cmake/sokol-shdc.cmake)
 
 # options
 option(BUILD_EXAMPLE_MINIMUM "Build minimum example" ON)
@@ -19,6 +21,17 @@ macro(add_example target_name)
     target_link_libraries(${target_name} ${FALCON_LIBRARIES})
     target_sources(${target_name} PRIVATE ${target_name}.cpp)
     target_compile_features(${target_name} PRIVATE cxx_std_17)
+endmacro()
+
+# macro: add example shader
+macro(add_shader target_name input output slang)
+    add_custom_target(shader_${target_name}
+        SOURCES ${output}
+    )
+    add_custom_command(OUTPUT ${output}
+        COMMAND ${SOKOL_SHDC_PATH} --input ${input} --output ${CMAKE_CURRENT_SOURCE_DIR}/${output} --slang ${slang}
+    )
+    add_dependencies(${target_name} shader_${target_name})
 endmacro()
 
 # example: minimum
@@ -34,4 +47,5 @@ endif()
 # example: triangle
 if(BUILD_EXAMPLE_TRIANGLE)
     add_example(triangle)
+    add_shader(triangle ${SOKOL_SAMPLES_SAPP_PATH}/triangle-sapp.glsl triangle-sapp.glsl.h glsl330)
 endif()
