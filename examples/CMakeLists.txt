@@ -8,7 +8,7 @@ project(falcon_examples C CXX)
 # includes
 include(cmake/falcon.cmake)
 include(cmake/sokol-samples.cmake)
-include(cmake/sokol-shdc.cmake)
+include(cmake/sokol-tools-bin.cmake)
 
 # options
 option(BUILD_EXAMPLE_MINIMUM "Build minimum example" ON)
@@ -25,12 +25,7 @@ endmacro()
 
 # macro: add example shader
 macro(add_shader target_name input output slang)
-    add_custom_target(shader_${target_name}
-        SOURCES ${output}
-    )
-    add_custom_command(OUTPUT ${output}
-        COMMAND ${SOKOL_SHDC_PATH} --input ${input} --output ${CMAKE_CURRENT_SOURCE_DIR}/${output} --slang ${slang}
-    )
+    add_sokol_shader(shader_${target_name} ${input} ${CMAKE_CURRENT_SOURCE_DIR}/${output} ${slang})
     add_dependencies(${target_name} shader_${target_name})
 endmacro()
 
