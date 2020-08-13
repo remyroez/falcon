@@ -15,7 +15,7 @@ public:
     virtual ~application() {}
 
     // setup
-    void setup(int argc, char** argv, sapp_desc *desc);
+    void setup(int argc, char** argv, sapp_desc &desc);
 
     // shutdown
     void shutdown();
@@ -24,7 +24,7 @@ public:
     void quit();
 
     // configure callback
-    void configure_cb(sapp_desc *desc);
+    void configure_cb(sapp_desc &desc);
 
     // initialize callback
     void init_cb();
@@ -41,12 +41,18 @@ public:
     // fail callback
     void fail_cb(const char *message);
 
+    // get main window width
+    inline int width() const { return sapp_width(); }
+
+    // get main window height
+    inline int height() const { return sapp_height(); }
+
     // get delta time
     inline double delta_time() const { return _delta_time; }
 
 protected:
     // configure
-    virtual void configure(sapp_desc *desc) {}
+    virtual void configure(sapp_desc &desc) {}
 
     // initialize
     virtual void init() {}
@@ -77,7 +83,7 @@ private:
 sapp_desc sokol_main(int argc, char* argv[]) { \
     static APP _app; \
     sapp_desc desc = {}; \
-    _app.setup(argc, argv, &desc); \
+    _app.setup(argc, argv, desc); \
     return desc; \
 }
 

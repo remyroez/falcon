@@ -4,3 +4,6 @@
 [submodule "examples/thirdparty/sokol-samples"]
 	path = examples/thirdparty/sokol-samples
 	url = https://github.com/floooh/sokol-samples.git
+[submodule "examples/thirdparty/sokol-tools-bin"]
+	path = examples/thirdparty/sokol-tools-bin
+	url = https://github.com/floooh/sokol-tools-bin.git

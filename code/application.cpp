@@ -48,7 +48,7 @@ void fail(const char *message, void *userdata) {
 
 namespace falcon {
 
-void application::setup(int argc, char** argv, sapp_desc *desc) {
+void application::setup(int argc, char** argv, sapp_desc &desc) {
     // setup arguments
     {
         sargs_desc args{ argc, argv };
@@ -78,19 +78,19 @@ void application::quit() {
     sapp_request_quit();
 }
 
-void application::configure_cb(sapp_desc *desc) {
+void application::configure_cb(sapp_desc &desc) {
     // default config
-    desc->user_data = this;
-    desc->init_userdata_cb = ::init;
-    desc->frame_userdata_cb = ::frame;
-    desc->cleanup_userdata_cb = ::cleanup;
-    desc->event_userdata_cb = ::event;
-    desc->fail_userdata_cb = ::fail;
-    desc->width = 1024;
-    desc->height = 768;
-    desc->gl_force_gles2 = true;
-    desc->window_title = "dear";
-    desc->ios_keyboard_resizes_canvas = false;
+    desc.user_data = this;
+    desc.init_userdata_cb = ::init;
+    desc.frame_userdata_cb = ::frame;
+    desc.cleanup_userdata_cb = ::cleanup;
+    desc.event_userdata_cb = ::event;
+    desc.fail_userdata_cb = ::fail;
+    desc.width = 1024;
+    desc.height = 768;
+    desc.gl_force_gles2 = true;
+    desc.window_title = "falcon app";
+    desc.ios_keyboard_resizes_canvas = false;
 
     // ユーザーコールバック
     configure(desc);
