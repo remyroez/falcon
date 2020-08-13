@@ -4,12 +4,15 @@
 namespace {
 
 class app : public falcon::application {
-    void frame() override {
-        _renderer.begin_default_pass(width(), height());
-        _renderer.end_pass();
+    void init() override {
+        _pass_action = falcon::gfx::make<falcon::gfx::pass_action>();
     }
 
-    falcon::renderer _renderer;
+    void frame() override {
+        falcon::gfx::begin(_pass_action, width(), height());
+    }
+
+    falcon::gfx::pass_action _pass_action;
 };
 
 } // namespace

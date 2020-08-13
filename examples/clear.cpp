@@ -11,19 +11,24 @@ class app : public falcon::application {
     }
 
     void init() override {
-        _renderer.set_clear_color_action(0, 1.f, 0.f, 0.f);
+        _pass_action = falcon::gfx::make<falcon::gfx::pass_action>([](auto &_) {
+            _.colors[0] = falcon::gfx::make<falcon::gfx::color_attachment_action>([](auto &_) {
+                _.action = SG_ACTION_CLEAR;
+                _.val[0] = 1.f;
+                _.val[1] = 0.f;
+                _.val[2] = 0.f;
+                _.val[3] = 1.f;
+            });
+        });
     }
 
     void frame() override {
-        const auto &colors = _renderer.color_attachment_action_colors(0);
-        auto g = colors[1] + 0.01f;
-        _renderer.set_clear_color_action(0, colors[0], (g > 1.0f) ? 0.f : g, colors[2], colors[3]);
-
-        _renderer.begin_default_pass(width(), height());
-        _renderer.end_pass();
+        float g = _pass_action.colors[0].val[1] + 0.01f;
+        _pass_action.colors[0].val[1] = (g > 1.0f) ? 0.0f : g;
+        falcon::gfx::begin(_pass_action, width(), height());
     }
 
-    falcon::renderer _renderer;
+    falcon::gfx::pass_action _pass_action;
 };
 
 } // namespace
