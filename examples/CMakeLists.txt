@@ -16,6 +16,7 @@ option(BUILD_EXAMPLE_MINIMUM "Build minimum example" OFF)
 option(BUILD_EXAMPLE_CLEAR "Build clear example" OFF)
 option(BUILD_EXAMPLE_TRIANGLE "Build triangle example" OFF)
 option(BUILD_EXAMPLE_QUAD "Build quad example" OFF)
+option(BUILD_EXAMPLE_BUFFEROFFSETS "Build bufferoffsets example" OFF)
 
 # macro: add example executable
 macro(add_example target_name)
@@ -60,4 +61,9 @@ endif()
 # example: quad
 if(BUILD_EXAMPLE_QUAD OR BUILD_EXAMPLE_ALL)
     add_example_with_shader(quad)
+endif()
+
+# example: bufferoffsets
+if(BUILD_EXAMPLE_BUFFEROFFSETS OR BUILD_EXAMPLE_ALL)
+    add_example_with_shader(bufferoffsets)
 endif()
