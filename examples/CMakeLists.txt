@@ -11,10 +11,11 @@ include(cmake/sokol-samples.cmake)
 include(cmake/sokol-tools-bin.cmake)
 
 # options
-option(BUILD_EXAMPLE_MINIMUM "Build minimum example" ON)
-option(BUILD_EXAMPLE_CLEAR "Build clear example" ON)
-option(BUILD_EXAMPLE_TRIANGLE "Build triangle example" ON)
-option(BUILD_EXAMPLE_QUAD "Build quad example" ON)
+option(BUILD_EXAMPLE_ALL "Build all example" ON)
+option(BUILD_EXAMPLE_MINIMUM "Build minimum example" OFF)
+option(BUILD_EXAMPLE_CLEAR "Build clear example" OFF)
+option(BUILD_EXAMPLE_TRIANGLE "Build triangle example" OFF)
+option(BUILD_EXAMPLE_QUAD "Build quad example" OFF)
 
 # macro: add example executable
 macro(add_example target_name)
@@ -25,29 +26,38 @@ macro(add_example target_name)
 endmacro()
 
 # macro: add example shader
-macro(add_shader target_name input output slang)
-    add_sokol_shader(shader_${target_name} ${input} ${CMAKE_CURRENT_SOURCE_DIR}/${output} ${slang})
+macro(add_shader target_name slang)
+    add_sokol_shader(
+        shader_${target_name}
+        ${SOKOL_SAMPLES_SAPP_PATH}/${target_name}-sapp.glsl
+        ${CMAKE_CURRENT_SOURCE_DIR}/${target_name}-sapp.glsl.h
+        ${slang}
+    )
     add_dependencies(${target_name} shader_${target_name})
 endmacro()
 
+# macro: add example with shader
+macro(add_example_with_shader target_name)
+    add_example(${target_name})
+    add_shader(${target_name} glsl330)
+endmacro()
+
 # example: minimum
-if(BUILD_EXAMPLE_MINIMUM)
+if(BUILD_EXAMPLE_MINIMUM OR BUILD_EXAMPLE_ALL)
     add_example(minimum)
 endif()
 
 # example: clear
-if(BUILD_EXAMPLE_CLEAR)
+if(BUILD_EXAMPLE_CLEAR OR BUILD_EXAMPLE_ALL)
     add_example(clear)
 endif()
 
 # example: triangle
-if(BUILD_EXAMPLE_TRIANGLE)
-    add_example(triangle)
-    add_shader(triangle ${SOKOL_SAMPLES_SAPP_PATH}/triangle-sapp.glsl triangle-sapp.glsl.h glsl330)
+if(BUILD_EXAMPLE_TRIANGLE OR BUILD_EXAMPLE_ALL)
+    add_example_with_shader(triangle)
 endif()
 
 # example: quad
-if(BUILD_EXAMPLE_QUAD)
-    add_example(quad)
-    add_shader(quad ${SOKOL_SAMPLES_SAPP_PATH}/quad-sapp.glsl quad-sapp.glsl.h glsl330)
+if(BUILD_EXAMPLE_QUAD OR BUILD_EXAMPLE_ALL)
+    add_example_with_shader(quad)
 endif()

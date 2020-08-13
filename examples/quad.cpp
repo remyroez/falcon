@@ -5,9 +5,6 @@
 namespace {
 
 class app : public falcon::application {
-public:
-    app() : pip{}, bind{} {}
-
     void configure(sapp_desc *desc) override {
         desc->width = 800;
         desc->height = 600;
@@ -15,33 +12,37 @@ public:
     }
 
     void init() override {
-        /* a vertex buffer */
-        const float vertices[] = {
-            // positions            colors
-            -0.5f,  0.5f, 0.5f,     1.0f, 0.0f, 0.0f, 1.0f,
-             0.5f,  0.5f, 0.5f,     0.0f, 1.0f, 0.0f, 1.0f,
-             0.5f, -0.5f, 0.5f,     0.0f, 0.0f, 1.0f, 1.0f,
-            -0.5f, -0.5f, 0.5f,     1.0f, 1.0f, 0.0f, 1.0f,
-        };
-        bind.vertex_buffers[0] = falcon::gfx::make_buffer([&vertices](auto &_) {
-            _.size = sizeof(vertices);
-            _.content = vertices;
-            _.label = "quad-vertices";
-        });
+        using namespace falcon::gfx;
 
-        /* an index buffer with 2 triangles */
-        const uint16_t indices[] = { 0, 1, 2,  0, 2, 3 };
-        bind.index_buffer = falcon::gfx::make_buffer([&indices](auto &_) {
-            _.type = SG_BUFFERTYPE_INDEXBUFFER;
-            _.size = sizeof(indices);
-            _.content = indices;
-            _.label = "quad-indices";
+        _bindings = make<bindings>([](auto &_) {
+            /* a vertex buffer */
+            const float vertices[] = {
+                // positions            colors
+                -0.5f,  0.5f, 0.5f,     1.0f, 0.0f, 0.0f, 1.0f,
+                 0.5f,  0.5f, 0.5f,     0.0f, 1.0f, 0.0f, 1.0f,
+                 0.5f, -0.5f, 0.5f,     0.0f, 0.0f, 1.0f, 1.0f,
+                -0.5f, -0.5f, 0.5f,     1.0f, 1.0f, 0.0f, 1.0f,
+            };
+            _.vertex_buffers[0] = make_buffer([&vertices](auto &_) {
+                _.size = sizeof(vertices);
+                _.content = vertices;
+                _.label = "quad-vertices";
+            });
+
+            /* an index buffer with 2 triangles */
+            const uint16_t indices[] = { 0, 1, 2,  0, 2, 3 };
+            _.index_buffer = make_buffer([&indices](auto &_) {
+                _.type = SG_BUFFERTYPE_INDEXBUFFER;
+                _.size = sizeof(indices);
+                _.content = indices;
+                _.label = "quad-indices";
+            });
         });
 
         /* a pipeline state object */
-        pip = falcon::gfx::make_pipeline([](auto &_) {
+        _pipeline = make_pipeline([](auto &_) {
             /* a shader (use separate shader sources here */
-            _.shader = falcon::gfx::make_shader(quad_shader_desc());
+            _.shader = make_shader(quad_shader_desc());
             _.index_type = SG_INDEXTYPE_UINT16;
             _.layout.attrs[ATTR_vs_position].format = SG_VERTEXFORMAT_FLOAT3;
             _.layout.attrs[ATTR_vs_color0].format = SG_VERTEXFORMAT_FLOAT4;
@@ -49,20 +50,27 @@ public:
         });
 
         /* default pass action */
-        _renderer.set_clear_color_action(0, 0.f, 0.f, 0.f);
+        _pass_action = make<pass_action>([](auto &_) {
+            _.colors[0] = make<color_attachment_action>([](auto &_) {
+                _.action = SG_ACTION_CLEAR;
+                _.val[0] = 0.f;
+                _.val[1] = 0.f;
+                _.val[2] = 0.f;
+                _.val[3] = 1.f;
+            });
+        });
     }
 
     void frame() override {
-        _renderer.begin_default_pass(width(), height());
-        sg_apply_pipeline(pip);
-        sg_apply_bindings(bind);
-        sg_draw(0, 6, 1);
-        _renderer.end_pass();
+        falcon::gfx::begin(_pass_action, width(), height())
+            .pipeline(_pipeline)
+                .bindings(_bindings)
+                .draw(0, 6, 1);
     }
 
-    falcon::gfx::pipeline pip;
-    falcon::gfx::bindings bind;
-    falcon::renderer _renderer;
+    falcon::gfx::pass_action _pass_action;
+    falcon::gfx::pipeline _pipeline;
+    falcon::gfx::bindings _bindings;
 };
 
 } // namespace
