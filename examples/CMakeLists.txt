@@ -17,6 +17,7 @@ option(BUILD_EXAMPLE_CLEAR "Build clear example" OFF)
 option(BUILD_EXAMPLE_TRIANGLE "Build triangle example" OFF)
 option(BUILD_EXAMPLE_QUAD "Build quad example" OFF)
 option(BUILD_EXAMPLE_BUFFEROFFSETS "Build bufferoffsets example" OFF)
+option(BUILD_EXAMPLE_CUBE "Build cube example" OFF)
 
 # macro: add example executable
 macro(add_example target_name)
@@ -66,4 +67,10 @@ endif()
 # example: bufferoffsets
 if(BUILD_EXAMPLE_BUFFEROFFSETS OR BUILD_EXAMPLE_ALL)
     add_example_with_shader(bufferoffsets)
+endif()
+
+# example: cube
+if(BUILD_EXAMPLE_CUBE OR BUILD_EXAMPLE_ALL)
+    add_example_with_shader(cube)
+    target_include_directories(cube PRIVATE ${HANDMADEMATH_INCLUDE_DIR})
 endif()
