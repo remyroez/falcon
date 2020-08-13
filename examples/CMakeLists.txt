@@ -14,6 +14,7 @@ include(cmake/sokol-tools-bin.cmake)
 option(BUILD_EXAMPLE_MINIMUM "Build minimum example" ON)
 option(BUILD_EXAMPLE_CLEAR "Build clear example" ON)
 option(BUILD_EXAMPLE_TRIANGLE "Build triangle example" ON)
+option(BUILD_EXAMPLE_QUAD "Build quad example" ON)
 
 # macro: add example executable
 macro(add_example target_name)
@@ -43,4 +44,10 @@ endif()
 if(BUILD_EXAMPLE_TRIANGLE)
     add_example(triangle)
     add_shader(triangle ${SOKOL_SAMPLES_SAPP_PATH}/triangle-sapp.glsl triangle-sapp.glsl.h glsl330)
+endif()
+
+# example: quad
+if(BUILD_EXAMPLE_QUAD)
+    add_example(quad)
+    add_shader(quad ${SOKOL_SAMPLES_SAPP_PATH}/quad-sapp.glsl quad-sapp.glsl.h glsl330)
 endif()
