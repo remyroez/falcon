@@ -5,10 +5,10 @@
 namespace {
 
 class app : public falcon::application {
-    void configure(sapp_desc *desc) override {
-        desc->width = 800;
-        desc->height = 600;
-        desc->window_title = "Quad (falcon app)";
+    void configure(sapp_desc &desc) override {
+        desc.width = 800;
+        desc.height = 600;
+        desc.window_title = "Quad (falcon app)";
     }
 
     void init() override {
