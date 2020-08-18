@@ -21,14 +21,14 @@ using color_attachment_action = sg_color_attachment_action;
 using bindings = sg_bindings;
 
 // function wrappers
-inline buffer make_buffer(const sg_buffer_desc* desc) { return sg_make_buffer(desc); }
-inline buffer make_buffer(const sg_buffer_desc& desc) { return sg_make_buffer(desc); }
-inline buffer make_buffer(std::function<void(sg_buffer_desc&)> fn) {
+inline auto make_buffer(const sg_buffer_desc* desc) { return sg_make_buffer(desc); }
+inline auto make_buffer(const sg_buffer_desc& desc) { return sg_make_buffer(desc); }
+inline auto make_buffer(std::function<void(sg_buffer_desc&)> fn) {
     sg_buffer_desc desc{};
     fn(desc);
     return make_buffer(desc);
 }
-inline buffer make_vertex_buffer(void *content, int size, const char *label = nullptr) {
+inline auto make_vertex_buffer(void *content, int size, const char *label = nullptr) {
     return make_buffer([&](auto &_) {
         _.type = SG_BUFFERTYPE_VERTEXBUFFER;
         _.size = size;
@@ -36,7 +36,7 @@ inline buffer make_vertex_buffer(void *content, int size, const char *label = nu
         _.label = label;
     });
 }
-inline buffer make_index_buffer(void *content, int size, const char *label = nullptr) {
+inline auto make_index_buffer(void *content, int size, const char *label = nullptr) {
     return make_buffer([&](auto &_) {
         _.type = SG_BUFFERTYPE_INDEXBUFFER;
         _.size = size;
@@ -45,28 +45,36 @@ inline buffer make_index_buffer(void *content, int size, const char *label = nul
     });
 }
 
-inline image make_image(const sg_image_desc* desc) { return sg_make_image(desc); }
-inline image make_image(const sg_image_desc& desc) { return sg_make_image(desc); }
-inline image make_image(std::function<void(sg_image_desc&)> fn) {
+inline auto make_image(const sg_image_desc* desc) { return sg_make_image(desc); }
+inline auto make_image(const sg_image_desc& desc) { return sg_make_image(desc); }
+inline auto make_image(std::function<void(sg_image_desc&)> fn) {
     sg_image_desc desc{};
     fn(desc);
     return make_image(desc);
 }
 
-inline shader make_shader(const sg_shader_desc* desc) { return sg_make_shader(desc); }
-inline shader make_shader(const sg_shader_desc& desc) { return sg_make_shader(desc); }
-inline shader make_shader(std::function<void(sg_shader_desc&)> fn) {
+inline auto make_shader(const sg_shader_desc* desc) { return sg_make_shader(desc); }
+inline auto make_shader(const sg_shader_desc& desc) { return sg_make_shader(desc); }
+inline auto make_shader(std::function<void(sg_shader_desc&)> fn) {
     sg_shader_desc desc{};
     fn(desc);
     return make_shader(desc);
 }
 
-inline pipeline make_pipeline(const sg_pipeline_desc* desc) { return sg_make_pipeline(desc); }
-inline pipeline make_pipeline(const sg_pipeline_desc& desc) { return sg_make_pipeline(desc); }
-inline pipeline make_pipeline(std::function<void(sg_pipeline_desc&)> fn) {
+inline auto make_pipeline(const sg_pipeline_desc* desc) { return sg_make_pipeline(desc); }
+inline auto make_pipeline(const sg_pipeline_desc& desc) { return sg_make_pipeline(desc); }
+inline auto make_pipeline(std::function<void(sg_pipeline_desc&)> fn) {
     sg_pipeline_desc desc{};
     fn(desc);
     return make_pipeline(desc);
+}
+
+inline auto make_pass(const sg_pass_desc* desc) { return sg_make_pass(desc); }
+inline auto make_pass(const sg_pass_desc& desc) { return sg_make_pass(desc); }
+inline auto make_pass(std::function<void(sg_pass_desc&)> fn) {
+    sg_pass_desc desc{};
+    fn(desc);
+    return make_pass(desc);
 }
 
 template <class T>
@@ -81,7 +89,7 @@ inline T make() {
     return T{};
 }
 
-inline pass_action make_pass_action_clear(float r, float g, float b, float a = 1.f) {
+inline auto make_pass_action_clear(float r, float g, float b, float a = 1.f) {
     return make<pass_action>([&](auto &_) {
         _.colors[0] = make<color_attachment_action>([&](auto &_) {
             _.action = SG_ACTION_CLEAR;

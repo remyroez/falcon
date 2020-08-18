@@ -20,6 +20,7 @@ option(BUILD_EXAMPLE_BUFFEROFFSETS "Build bufferoffsets example" OFF)
 option(BUILD_EXAMPLE_CUBE "Build cube example" OFF)
 option(BUILD_EXAMPLE_NONINTERLEAVED "Build noninterleaved example" OFF)
 option(BUILD_EXAMPLE_TEXCUBE "Build texcube example" OFF)
+option(BUILD_EXAMPLE_OFFSCREEN "Build offscreen example" OFF)
 
 # macro: add example executable
 macro(add_example target_name)
@@ -87,4 +88,10 @@ endif()
 if(BUILD_EXAMPLE_TEXCUBE OR BUILD_EXAMPLE_ALL)
     add_example_with_shader(texcube)
     target_include_directories(texcube PRIVATE ${HANDMADEMATH_INCLUDE_DIR})
+endif()
+
+# example: offscreen
+if(BUILD_EXAMPLE_OFFSCREEN OR BUILD_EXAMPLE_ALL)
+    add_example_with_shader(offscreen)
+    target_include_directories(offscreen PRIVATE ${HANDMADEMATH_INCLUDE_DIR})
 endif()
