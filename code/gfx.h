@@ -28,6 +28,22 @@ inline buffer make_buffer(std::function<void(sg_buffer_desc&)> fn) {
     fn(desc);
     return make_buffer(desc);
 }
+inline buffer make_vertex_buffer(void *content, int size, const char *label = nullptr) {
+    return make_buffer([&](auto &_) {
+        _.type = SG_BUFFERTYPE_VERTEXBUFFER;
+        _.size = size;
+        _.content = content;
+        _.label = label;
+    });
+}
+inline buffer make_index_buffer(void *content, int size, const char *label = nullptr) {
+    return make_buffer([&](auto &_) {
+        _.type = SG_BUFFERTYPE_INDEXBUFFER;
+        _.size = size;
+        _.content = content;
+        _.label = label;
+    });
+}
 
 inline image make_image(const sg_image_desc* desc) { return sg_make_image(desc); }
 inline image make_image(const sg_image_desc& desc) { return sg_make_image(desc); }
@@ -63,6 +79,18 @@ inline T make(std::function<void(T&)> fn) {
 template <class T>
 inline T make() {
     return T{};
+}
+
+inline pass_action make_pass_action_clear(float r, float g, float b, float a = 1.f) {
+    return make<pass_action>([&](auto &_) {
+        _.colors[0] = make<color_attachment_action>([&](auto &_) {
+            _.action = SG_ACTION_CLEAR;
+            _.val[0] = r;
+            _.val[1] = g;
+            _.val[2] = b;
+            _.val[3] = a;
+        });
+    });
 }
 
 // pipeline state
