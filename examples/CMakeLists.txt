@@ -18,6 +18,7 @@ option(BUILD_EXAMPLE_TRIANGLE "Build triangle example" OFF)
 option(BUILD_EXAMPLE_QUAD "Build quad example" OFF)
 option(BUILD_EXAMPLE_BUFFEROFFSETS "Build bufferoffsets example" OFF)
 option(BUILD_EXAMPLE_CUBE "Build cube example" OFF)
+option(BUILD_EXAMPLE_NONINTERLEAVED "Build noninterleaved example" OFF)
 
 # macro: add example executable
 macro(add_example target_name)
@@ -73,4 +74,10 @@ endif()
 if(BUILD_EXAMPLE_CUBE OR BUILD_EXAMPLE_ALL)
     add_example_with_shader(cube)
     target_include_directories(cube PRIVATE ${HANDMADEMATH_INCLUDE_DIR})
+endif()
+
+# example: noninterleaved
+if(BUILD_EXAMPLE_NONINTERLEAVED OR BUILD_EXAMPLE_ALL)
+    add_example_with_shader(noninterleaved)
+    target_include_directories(noninterleaved PRIVATE ${HANDMADEMATH_INCLUDE_DIR})
 endif()
