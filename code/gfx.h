@@ -28,7 +28,7 @@ inline auto make_buffer(std::function<void(sg_buffer_desc&)> fn) {
     fn(desc);
     return make_buffer(desc);
 }
-inline auto make_vertex_buffer(void *content, int size, const char *label = nullptr) {
+inline auto make_vertex_buffer(const void *content, int size, const char *label = nullptr) {
     return make_buffer([&](auto &_) {
         _.type = SG_BUFFERTYPE_VERTEXBUFFER;
         _.size = size;
@@ -36,7 +36,7 @@ inline auto make_vertex_buffer(void *content, int size, const char *label = null
         _.label = label;
     });
 }
-inline auto make_index_buffer(void *content, int size, const char *label = nullptr) {
+inline auto make_index_buffer(const void *content, int size, const char *label = nullptr) {
     return make_buffer([&](auto &_) {
         _.type = SG_BUFFERTYPE_INDEXBUFFER;
         _.size = size;
@@ -99,6 +99,10 @@ inline auto make_pass_action_clear(float r, float g, float b, float a = 1.f) {
             _.val[3] = a;
         });
     });
+}
+
+inline void update_buffer(const buffer &buf_id, const void* data, int num_bytes) {
+    return sg_update_buffer(buf_id, data, num_bytes);
 }
 
 // pipeline state
