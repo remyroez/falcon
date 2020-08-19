@@ -123,6 +123,10 @@ inline void update_image(sg_image img, const sg_image_content &data) {
     sg_update_image(img, data);
 }
 
+inline void update_image(sg_image img, std::function<void(sg_image_content&)> fn) {
+    update_image(img, make<sg_image_content>(fn));
+}
+
 // pipeline state
 struct pipeline_state final {
     inline operator bool() { return true; }
