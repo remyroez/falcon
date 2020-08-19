@@ -22,6 +22,7 @@ option(BUILD_EXAMPLE_NONINTERLEAVED "Build noninterleaved example" OFF)
 option(BUILD_EXAMPLE_TEXCUBE "Build texcube example" OFF)
 option(BUILD_EXAMPLE_OFFSCREEN "Build offscreen example" OFF)
 option(BUILD_EXAMPLE_INSTANCING "Build instancing example" OFF)
+option(BUILD_EXAMPLE_MRT "Build mrt example" OFF)
 
 # macro: add example executable
 macro(add_example target_name)
@@ -101,4 +102,10 @@ endif()
 if(BUILD_EXAMPLE_INSTANCING OR BUILD_EXAMPLE_ALL)
     add_example_with_shader(instancing)
     target_include_directories(instancing PRIVATE ${HANDMADEMATH_INCLUDE_DIR})
+endif()
+
+# example: mrt
+if(BUILD_EXAMPLE_MRT OR BUILD_EXAMPLE_ALL)
+    add_example_with_shader(mrt)
+    target_include_directories(mrt PRIVATE ${HANDMADEMATH_INCLUDE_DIR})
 endif()

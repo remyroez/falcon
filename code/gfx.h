@@ -101,30 +101,68 @@ inline auto make_pass_action_clear(float r, float g, float b, float a = 1.f) {
     });
 }
 
+inline void destroy(const buffer &a) { sg_destroy_buffer(a); }
+inline void destroy(const image &a) { sg_destroy_image(a); }
+inline void destroy(const shader &a) { sg_destroy_shader(a); }
+inline void destroy(const pipeline &a) { sg_destroy_pipeline(a); }
+inline void destroy(const pass &a) { sg_destroy_pass(a); }
+
 inline void update_buffer(const buffer &buf_id, const void* data, int num_bytes) {
-    return sg_update_buffer(buf_id, data, num_bytes);
+    sg_update_buffer(buf_id, data, num_bytes);
+}
+
+inline auto append_buffer(const buffer &buf_id, const void* data, int num_bytes) {
+    return sg_append_buffer(buf_id, data, num_bytes);
+}
+
+inline auto query_buffer_overflow(const buffer &buf_id) {
+    return sg_query_buffer_overflow(buf_id);
+}
+
+inline void update_image(sg_image img, const sg_image_content &data) {
+    sg_update_image(img, data);
 }
 
 // pipeline state
 struct pipeline_state final {
     inline operator bool() { return true; }
 
-    inline pipeline_state &bindings(const sg_bindings* bindings) {
+    inline auto &bindings(const sg_bindings* bindings) {
         sg_apply_bindings(bindings);
         return *this;
     }
-    inline pipeline_state &bindings(const sg_bindings& bindings) {
+    inline auto &bindings(const sg_bindings& bindings) {
         sg_apply_bindings(bindings);
         return *this;
     }
 
-    inline pipeline_state &uniforms(sg_shader_stage stage, int ub_index, const void* data, int num_bytes) {
+    inline auto &viewport(int x, int y, int width, int height, bool origin_top_left) {
+        sg_apply_viewport(x, y, width, height, origin_top_left);
+        return *this;
+    }
+
+    inline auto &scissor_rect(int x, int y, int width, int height, bool origin_top_left) {
+        sg_apply_scissor_rect(x, y, width, height, origin_top_left);
+        return *this;
+    }
+
+    inline auto &uniforms(sg_shader_stage stage, int ub_index, const void* data, int num_bytes) {
         sg_apply_uniforms(stage, ub_index, data, num_bytes);
         return *this;
     }
 
-    inline pipeline_state &draw(int base_element, int num_elements, int num_instances) {
+    inline auto &draw(int base_element, int num_elements, int num_instances) {
         sg_draw(base_element, num_elements, num_instances);
+        return *this;
+    }
+
+    inline auto pipeline(pipeline &pip) {
+        sg_apply_pipeline(pip);
+        return pipeline_state{};
+    }
+
+    inline auto &apply(std::function<void(pipeline_state&)> fn) {
+        if (fn) fn(*this);
         return *this;
     }
 };
@@ -135,24 +173,29 @@ struct pass_state final {
 
     inline operator bool() { return true; }
 
-    inline pass_state &viewport(int x, int y, int width, int height, bool origin_top_left) {
+    inline auto &viewport(int x, int y, int width, int height, bool origin_top_left) {
         sg_apply_viewport(x, y, width, height, origin_top_left);
         return *this;
     }
 
-    inline pass_state &scissor_rect(int x, int y, int width, int height, bool origin_top_left) {
+    inline auto &scissor_rect(int x, int y, int width, int height, bool origin_top_left) {
         sg_apply_scissor_rect(x, y, width, height, origin_top_left);
         return *this;
     }
 
-    inline pass_state &uniforms(sg_shader_stage stage, int ub_index, const void* data, int num_bytes) {
+    inline auto &uniforms(sg_shader_stage stage, int ub_index, const void* data, int num_bytes) {
         sg_apply_uniforms(stage, ub_index, data, num_bytes);
         return *this;
     }
 
-    inline pipeline_state pipeline(pipeline &pip) {
+    inline auto pipeline(pipeline &pip) {
         sg_apply_pipeline(pip);
         return pipeline_state{};
+    }
+
+    inline auto &apply(std::function<void(pass_state&)> fn) {
+        if (fn) fn(*this);
+        return *this;
     }
 };
 
