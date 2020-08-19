@@ -23,6 +23,7 @@ option(BUILD_EXAMPLE_TEXCUBE "Build texcube example" OFF)
 option(BUILD_EXAMPLE_OFFSCREEN "Build offscreen example" OFF)
 option(BUILD_EXAMPLE_INSTANCING "Build instancing example" OFF)
 option(BUILD_EXAMPLE_MRT "Build mrt example" OFF)
+option(BUILD_EXAMPLE_ARRAYTEX "Build arraytex example" OFF)
 
 # macro: add example executable
 macro(add_example target_name)
@@ -108,4 +109,10 @@ endif()
 if(BUILD_EXAMPLE_MRT OR BUILD_EXAMPLE_ALL)
     add_example_with_shader(mrt)
     target_include_directories(mrt PRIVATE ${HANDMADEMATH_INCLUDE_DIR})
+endif()
+
+# example: arraytex
+if(BUILD_EXAMPLE_ARRAYTEX OR BUILD_EXAMPLE_ALL)
+    add_example_with_shader(arraytex)
+    target_include_directories(arraytex PRIVATE ${HANDMADEMATH_INCLUDE_DIR})
 endif()
